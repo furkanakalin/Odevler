@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Soru01 extends BaseDriver {
@@ -17,18 +18,33 @@ public class Soru01 extends BaseDriver {
         driver.get("http://dhtmlgoodies.com/scripts/drag-drop-quiz/drag-drop-quiz-d2.html");
         MyFunc.Bekle(2);
 
-        List<WebElement> cities = driver.findElements(By.xpath("//*[@id='answerDiv']//*[@class='dragDropSmallBox']"));
-        List<WebElement> countries = driver.findElements(By.xpath("//*[@id='questionDiv']//*[@class='destinationBox']"));
+        List<WebElement> cities = new ArrayList<>();
+        List<WebElement> countries = new ArrayList<>();
 
         Actions actions = new Actions(driver);
 
-        for (WebElement city : cities) {
-            for (WebElement country : countries) {
+        String a = "a";
+        String q = "q";
+        int sayi = 1;
 
-                actions.dragAndDrop(city,country).click().build().perform();
 
-            }
+        for (int i = 1; i < 16; i++) {
+            WebElement city = driver.findElement(By.id(a + sayi++));
+            cities.add(city);
+        }
+        sayi = 1;
+        for (int i = 1; i < 16; i++) {
+            WebElement country = driver.findElement(By.id(q + sayi++));
+            countries.add(country);
+        }
 
-        }BekleKapat();
+        for (int i = 0; i < cities.size(); i++) {
+            WebElement city = cities.get(i);
+            WebElement country = countries.get(i);
+            actions.moveToElement(city).clickAndHold().perform();
+            MyFunc.Bekle(2);
+            actions.release(country).perform();
+        }
+        BekleKapat();
     }
 }
